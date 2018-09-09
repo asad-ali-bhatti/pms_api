@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe API::V1::ProjectsController, type: :controller do
+  let(:user) { create(:user) }
+  let(:user_token) { Knock::AuthToken.new( payload: {sub: user.id}).token }
+
   context 'GET index' do
     it 'should return all projects' do
       4.times { create(:project) }
@@ -19,7 +22,6 @@ RSpec.describe API::V1::ProjectsController, type: :controller do
 
     it 'should return 200 response' do
       parsed_response  = JSON.parse(response.body)
-      p parsed_response
       expect(parsed_response['id']).to be_eql project.id
     end
 
@@ -33,6 +35,10 @@ RSpec.describe API::V1::ProjectsController, type: :controller do
     let(:old_title) { 'Project A' }
     let(:new_title) { 'Project X' }
     let(:project) { create(:project, title: old_title) }
+
+    before :each do
+      request.headers['Authorization'] = "Bearer #{user_token}"
+    end
 
     it 'should update project properties' do
       put :update, format: :json,  params: {id: project.id, project: {title: new_title} }
@@ -50,6 +56,10 @@ RSpec.describe API::V1::ProjectsController, type: :controller do
   end
 
   context 'POST create' do
+    before :each do
+      request.headers['Authorization'] = "Bearer #{user_token}"
+    end
+
     let(:params) { {project: {title: 'Project X'}} }
 
     it 'should create a project' do
@@ -63,6 +73,10 @@ RSpec.describe API::V1::ProjectsController, type: :controller do
   end
 
   context 'DELETE destroy' do
+    before :each do
+      request.headers['Authorization'] = "Bearer #{user_token}"
+    end
+
     let(:project) { create(:project) }
 
     it 'should delete a project' do
