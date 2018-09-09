@@ -26,7 +26,7 @@ RSpec.describe API::V1::ProjectsController, type: :controller do
     end
 
     it 'should return project with id' do
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
   end
@@ -65,7 +65,8 @@ RSpec.describe API::V1::ProjectsController, type: :controller do
     it 'should create a project' do
       post :create, format: :json, params: params
       parsed_response = JSON.parse(response.body)
-      expect(response).to be_success
+
+      expect(response).to be_successful
       expect(parsed_response['id']).not_to be_nil
       expect(parsed_response['title']).to eql(params[:project][:title])
       expect(response).to have_http_status :created
@@ -82,7 +83,7 @@ RSpec.describe API::V1::ProjectsController, type: :controller do
     it 'should delete a project' do
       delete :destroy, format: :json, params: { id: project.id }
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect { Project.find(project.id) }.to raise_error ActiveRecord::RecordNotFound
     end
   end
