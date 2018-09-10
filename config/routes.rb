@@ -2,10 +2,11 @@ Rails.application.routes.draw do
   post 'user_token' => 'user_token#create'
   namespace :api do
     namespace :v1 do
-      resources :comments
       resources :users
       resources :projects do
-        resources :tasks
+        resources :tasks do
+          resources :comments
+        end
       end
     end
   end
