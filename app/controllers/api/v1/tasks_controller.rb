@@ -5,7 +5,8 @@ module API
 
       # GET /tasks
       def index
-        @tasks = Task.all
+        @project = Project.find(params[:project_id])
+        @tasks = @project.tasks.all
 
         render json: @tasks
       end
@@ -43,7 +44,8 @@ module API
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_task
-        @task = Task.find(params[:id])
+        @project = Project.find(params[:project_id])
+        @task = @project.tasks.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.
