@@ -5,7 +5,8 @@ module API
 
       # GET /comments
       def index
-        @comments = Comment.all
+        @task  = Task.find(params[:task_id])
+        @comments = @task.comments
 
         render json: @comments
       end
@@ -43,7 +44,8 @@ module API
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_comment
-          @comment = Comment.find(params[:id])
+          task = Task.find(params[:task_id])
+          @comment = task.comments.find(params[:id])
         end
 
         # Only allow a trusted parameter "white list" through.
